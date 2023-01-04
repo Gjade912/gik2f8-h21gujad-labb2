@@ -24,6 +24,7 @@ app
 
 /* Express (som finns i variabeln app) har metoder för att specificera vad som ska hända vid olika HTTP-metoder. Man anropar metoden get() hos expressobjektet för att fånga upp förfrågningar med metoden GET - alltså en GET-förfrågan -  från en klient.  */
 
+
 /* .get tar emot
   1. En route, som utgör en del av adressen/URL:en dit man kan skicka förfrågan. Man anger det som ska stå efter domän och port (vår server är konfigurerar som default att köra på localhost:5000), så här metod lyssnar man alltså efter GET-anrop till url:en localhost:5000/task
   
@@ -113,21 +114,26 @@ app.delete('/tasks/:id', async (req, res) => {
   }
 });
 
-app.patch('/tasks/:id', async (req, res) => {
+app.put('/tasks', async (req, res) => {
+  res.status(418).send('Put anrop')
+  /*
   console.log(req);
   try {
     
     const id = req.params.id;
+    const check = req.params.completed
     
     const listBuffer = await fs.readFile('./tasks.json');
     
     const currentTasks = JSON.parse(listBuffer);
     
+    currentTasks.filter((task) => task.id != id).then(task.completed = check)
+
     if (currentTasks.length > 0) {
       
       await fs.writeFile(
         './tasks.json',
-        JSON.stringify(currentTasks.filter((task) => task.id != id))
+        JSON.stringify(currentTasks)
       );
       
       res.send({ message: `Uppgift med id ${id} togs bort` });
@@ -139,6 +145,7 @@ app.patch('/tasks/:id', async (req, res) => {
     
     res.status(500).send({ error: error.stack });
   }
+  */
 });
 
 /***********************Labb 2 ***********************/

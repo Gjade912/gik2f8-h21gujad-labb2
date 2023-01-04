@@ -71,6 +71,14 @@ class Api {
     );
   }
 
+  getOne(id) {
+    /* I detta fetch-anrop behövs inga särskilda inställningar. Fetch kan ta bara url:en som parameter också, istället för att man skapar ett helt request-objekt och skickar in det. */
+    return fetch(`${this.url}/${id}`)
+      .then((result) => result.json())
+      .then((data) => data)
+      .catch((err) => console.log(err));
+  }
+
   /* Read - GET */
   getAll() {
     /* I detta fetch-anrop behövs inga särskilda inställningar. Fetch kan ta bara url:en som parameter också, istället för att man skapar ett helt request-objekt och skickar in det. */
@@ -106,12 +114,19 @@ class Api {
       .catch((err) => console.log(err));
   }
 
-  update(id) {
+  update(id, check) {
 
     console.log(`Updating task with id ${id}`);
 
-    return fetch(`${this.url}/${id}`, {
-      method: 'PATCH'
+    return fetch(this.url, {
+      method: 'GET',
+      /*body: JSON.stringify({
+        completed: true,
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },*/
+
     })
       .then((result) => result)
       .catch((err) => console.log(err));

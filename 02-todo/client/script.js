@@ -270,7 +270,7 @@ function deleteTask(id) {
 }
 
 function updateTask(id) {
-  api.update(id).then((result) => {
+  api.update(id, true).then((result) => {
     renderList();
   });
 }
