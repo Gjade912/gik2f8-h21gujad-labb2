@@ -184,7 +184,11 @@ function renderList() {
     todoListElement.innerHTML = '';
 
     /* De hämtade uppgifterna från servern via api:et getAll-funktion får heta tasks, eftersom callbackfunktionen som skickades till then() har en parameter som är döpt så. Det är tasks-parametern som är innehållet i promiset. */
-
+    tasks.sort(function(a, b){
+      if(a.dueDate < b.dueDate) { return -1; }
+      if(a.dueDate > b.dueDate) { return 1; }
+      return 0;
+    })
     /* Koll om det finns någonting i tasks och om det är en array med längd större än 0 */
     if (tasks && tasks.length > 0) {
       /* Om tasks är en lista som har längd större än 0 loopas den igenom med forEach. forEach tar, likt then, en callbackfunktion. Callbackfunktionen tar emot namnet på varje enskilt element i arrayen, som i detta fall är ett objekt innehållande en uppgift.  */
@@ -196,6 +200,8 @@ function renderList() {
         4. renderTask(task) - funktion som returnerar HTML. 
         5. task (objekt som representerar en uppgift som finns i arrayen) skickas in till renderTask, för att renderTask ska kunna skapa HTML utifrån egenskaper hos uppgifts-objektet. 
         */
+
+
 
         /* Denna kod körs alltså en gång per element i arrayen tasks, dvs. en  gång för varje uppgiftsobjekt i listan. */
         todoListElement.insertAdjacentHTML('beforeend', renderTask(task));
@@ -225,7 +231,8 @@ function renderTask({ id, title, description, dueDate }) {
         <div>
           <span>${dueDate}</span>
           <button onclick="deleteTask(${id})" class="inline-block bg-amber-500 text-xs text-amber-900 border border-white px-3 py-1 rounded-md ml-2">Ta bort</button>
-        </div>
+          <button onclick="updateTask(${id})" class="inline-block bg-amber-500 text-xs text-amber-900 border border-white px-3 py-1 rounded-md ml-2">Markera</button>
+          </div>
       </div>`;
 
   /* Här har templatesträngen avslutats tillfälligt för att jag bara vill skriva ut kommande del av koden om description faktiskt finns */
@@ -262,6 +269,11 @@ function deleteTask(id) {
   });
 }
 
+function updateTask(id) {
+  api.update(id).then((result) => {
+    renderList();
+  });
+}
 /***********************Labb 2 ***********************/
 /* Här skulle det vara lämpligt att skriva den funktion som angivits som eventlyssnare för när någon markerar en uppgift som färdig. Jag pratar alltså om den eventlyssnare som angavs i templatesträngen i renderTask. Det kan t.ex. heta updateTask. 
   
