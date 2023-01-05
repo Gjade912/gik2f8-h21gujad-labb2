@@ -231,7 +231,7 @@ function renderTask({ id, title, description, dueDate, completed }) {
         <div>
           <span>${dueDate}</span>
           <button onclick="deleteTask(${id})" class="inline-block bg-amber-500 text-xs text-amber-900 border border-white px-3 py-1 rounded-md ml-2">Ta bort</button>
-          <input type="checkbox" onchange="updateTask(${id}, this.checked)" class="inline-block bg-amber-500 text-xs text-amber-900 border border-white px-3 py-1 rounded-md ml-2"`;
+          <input type="checkbox" onchange="updateTask(${id}, this.checked)" class="appearance-none inline-block bg-amber-500 text-xs text-amber-900 border border-white px-2 py-1 rounded-md ml-2 checked:bg-blue-500"`;
           
   if (completed == true){
     html += `checked`
