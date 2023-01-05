@@ -119,7 +119,7 @@ class Api {
     console.log(`Updating task with id ${id}`);
 
     return fetch(this.url, {
-      method: 'GET',
+      method: 'PUT',
       /*body: JSON.stringify({
         completed: true,
       }),
