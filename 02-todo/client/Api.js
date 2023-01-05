@@ -71,14 +71,6 @@ class Api {
     );
   }
 
-  getOne(id) {
-    /* I detta fetch-anrop behövs inga särskilda inställningar. Fetch kan ta bara url:en som parameter också, istället för att man skapar ett helt request-objekt och skickar in det. */
-    return fetch(`${this.url}/${id}`)
-      .then((result) => result.json())
-      .then((data) => data)
-      .catch((err) => console.log(err));
-  }
-
   /* Read - GET */
   getAll() {
     /* I detta fetch-anrop behövs inga särskilda inställningar. Fetch kan ta bara url:en som parameter också, istället för att man skapar ett helt request-objekt och skickar in det. */

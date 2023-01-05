@@ -120,17 +120,17 @@ app.patch('/tasks', async (req, res) => {
   console.log(req);
   try {
     
-    const id = req.body.id; //id undefined?
+    const id = req.body.id; 
     const check = req.body.completed
-    console.log(id)
     
     const listBuffer = await fs.readFile('./tasks.json');
     
     const currentTasks = JSON.parse(listBuffer);
     
-    
 
-    currentTasks.filter((task) => task.id == id).completed = check
+    changeTask = currentTasks.filter((task) => task.id == id)
+
+    changeTask[0].completed = check
 
     if (currentTasks.length > 0) {
       
@@ -139,7 +139,7 @@ app.patch('/tasks', async (req, res) => {
         JSON.stringify(currentTasks)
       );
       
-      res.send(currentTasks.filter((task) => task.id == id));
+      res.send(changeTask[0].completed);
     } else {
       
       res.status(404).send({ error: 'Ingen uppgift att uppdatera' });
