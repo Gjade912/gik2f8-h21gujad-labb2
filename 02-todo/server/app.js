@@ -114,20 +114,23 @@ app.delete('/tasks/:id', async (req, res) => {
   }
 });
 
-app.put('/tasks', async (req, res) => {
-  res.status(418).send('Put anrop')
-  /*
+app.patch('/tasks', async (req, res) => {
+  //res.status(418).send('Put anrop')
+  
   console.log(req);
   try {
     
-    const id = req.params.id;
-    const check = req.params.completed
+    const id = req.body.id; //id undefined?
+    const check = req.body.completed
+    console.log(id)
     
     const listBuffer = await fs.readFile('./tasks.json');
     
     const currentTasks = JSON.parse(listBuffer);
     
-    currentTasks.filter((task) => task.id != id).then(task.completed = check)
+    
+
+    currentTasks.filter((task) => task.id == id).completed = check
 
     if (currentTasks.length > 0) {
       
@@ -136,16 +139,16 @@ app.put('/tasks', async (req, res) => {
         JSON.stringify(currentTasks)
       );
       
-      res.send({ message: `Uppgift med id ${id} togs bort` });
+      res.send(currentTasks.filter((task) => task.id == id));
     } else {
       
-      res.status(404).send({ error: 'Ingen uppgift att ta bort' });
+      res.status(404).send({ error: 'Ingen uppgift att uppdatera' });
     }
   } catch (error) {
     
     res.status(500).send({ error: error.stack });
   }
-  */
+  
 });
 
 /***********************Labb 2 ***********************/
