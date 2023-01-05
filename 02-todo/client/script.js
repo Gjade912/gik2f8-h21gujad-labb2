@@ -214,7 +214,7 @@ function renderList() {
 Endast en uppgift åt gången kommer att skickas in här, eftersom den anropas inuti en forEach-loop, där uppgifterna loopas igenom i tur och ordning.  */
 
 /* Destructuring används för att endast plocka ut vissa egenskaper hos uppgifts-objektet. Det hade kunnat stå function renderTask(task) {...} här - för det är en hel task som skickas in - men då hade man behövt skriva task.id, task.title osv. på alla ställen där man ville använda dem. Ett trick är alltså att "bryta ut" dessa egenskaper direkt i funktionsdeklarationen istället. Så en hel task skickas in när funktionen anropas uppe i todoListElement.insertAdjacentHTML("beforeend", renderTask(task)), men endast vissa egenskaper ur det task-objektet tas emot här i funktionsdeklarationen. */
-function renderTask({ id, title, description, dueDate }) {
+function renderTask({ id, title, description, dueDate, completed }) {
   /* Baserat på inskickade egenskaper hos task-objektet skapas HTML-kod med styling med hjälp av tailwind-klasser. Detta görs inuti en templatestring  (inom`` för att man ska kunna använda variabler inuti. Dessa skrivs inom ${}) */
 
   /*
@@ -231,9 +231,15 @@ function renderTask({ id, title, description, dueDate }) {
         <div>
           <span>${dueDate}</span>
           <button onclick="deleteTask(${id})" class="inline-block bg-amber-500 text-xs text-amber-900 border border-white px-3 py-1 rounded-md ml-2">Ta bort</button>
-          <button onclick="updateTask(${id})" class="inline-block bg-amber-500 text-xs text-amber-900 border border-white px-3 py-1 rounded-md ml-2">Markera</button>
-          </div>
-      </div>`;
+          <input type="checkbox" onchange="updateTask(${id}, this.checked)" class="inline-block bg-amber-500 text-xs text-amber-900 border border-white px-3 py-1 rounded-md ml-2"`;
+          
+  if (completed == true){
+    html += `checked`
+  }
+          
+  html+= `>
+    </div>
+  </div>`;
 
   /* Här har templatesträngen avslutats tillfälligt för att jag bara vill skriva ut kommande del av koden om description faktiskt finns */
 
@@ -248,10 +254,7 @@ function renderTask({ id, title, description, dueDate }) {
   /* När html-strängen eventuellt har byggts på med HTML-kod för description-egenskapen läggs till sist en sträng motsvarande sluttaggen för <li>-elementet dit. */
   html += `
     </li>`;
-  /***********************Labb 2 ***********************/
-  /* I ovanstående template-sträng skulle det vara lämpligt att sätta en checkbox, eller ett annat element som någon kan klicka på för att markera en uppgift som färdig. Det elementet bör, likt knappen för delete, också lyssna efter ett event (om du använder en checkbox, kolla på exempelvis w3schools vilket element som triggas hos en checkbox när dess värde förändras.). Skapa en eventlyssnare till det event du finner lämpligt. Funktionen behöver nog ta emot ett id, så den vet vilken uppgift som ska markeras som färdig. Det skulle kunna vara ett checkbox-element som har attributet on[event]="updateTask(id)". */
-  /***********************Labb 2 ***********************/
-
+  
   /* html-variabeln returneras ur funktionen och kommer att vara den som sätts som andra argument i todoListElement.insertAdjacentHTML("beforeend", renderTask(task)) */
   return html;
 }
@@ -269,30 +272,13 @@ function deleteTask(id) {
   });
 }
 
-function updateTask(id) {
-  api.update(id, true).then((result) => {
+function updateTask(id, checked) {
+  console.log(checked)
+  api.update(id, checked).then((result) => {
     renderList();
   });
 }
-/***********************Labb 2 ***********************/
-/* Här skulle det vara lämpligt att skriva den funktion som angivits som eventlyssnare för när någon markerar en uppgift som färdig. Jag pratar alltså om den eventlyssnare som angavs i templatesträngen i renderTask. Det kan t.ex. heta updateTask. 
-  
-Funktionen bör ta emot ett id som skickas från <li>-elementet.
-*/
 
-/* Inuti funktionen kan ett objekt skickas till api-metoden update. Objektet ska som minst innehålla id på den uppgift som ska förändras, samt egenskapen completed som true eller false, beroende på om uppgiften markerades som färdig eller ofärdig i gränssnittet. 
-
-Det finns några sätt att utforma det som ska skickas till api.update-metoden. 
-
-Alternativ 1: objektet består av ett helt task-objekt, som också inkluderar förändringen. Exempel: {id: 1,  title: "x", description: "x", dueDate: "x", completed: true/false}
-Alternativ 2: objektet består bara av förändringarna och id på den uppgift som ska förändras. Exempel: {id: 1, completed: true/false } 
-
-Om du hittar något annat sätt som funkar för dig, använd för all del det, så länge det uppnår samma sak. :)
-*/
-
-/* Anropet till api.update ska följas av then(). then() behöver, som bör vara bekant vid det här laget, en callbackfunktion som ska hantera det som kommer tillbaka från servern via vår api-klass. Inuti den funktionen bör listan med uppgifter renderas på nytt, så att den nyligen gjorda förändringen syns. */
-
-/***********************Labb 2 ***********************/
 
 /* Slutligen. renderList anropas också direkt, så att listan visas när man först kommer in på webbsidan.  */
 renderList();
