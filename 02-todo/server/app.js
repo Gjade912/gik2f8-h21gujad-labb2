@@ -128,7 +128,7 @@ app.patch('/tasks', async (req, res) => {
     const currentTasks = JSON.parse(listBuffer);
     
 
-    changeTask = currentTasks.filter((task) => task.id == id)
+    const changeTask = currentTasks.filter((task) => task.id == id)
 
     changeTask[0].completed = check
 
